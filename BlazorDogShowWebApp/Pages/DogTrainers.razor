@@ -1,0 +1,112 @@
+﻿@page "/DogTrainers"
+<h3>Dog Trainers</h3>
+@*
+<MudSimpleTable Hover="true" Striped="true" Dense="true">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Id</th>
+			<th>TrainerName</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var trainer in trainers)
+		{
+			<tr>
+				<td><img src="@trainer.Image" class="rounded" style="max-height: 100px;"/></td>
+				<td>@trainer.TrainerID</td>
+				<td>@trainer.TrainerName</td>
+				<td>
+					<button class="btn btn-primary" @onclick="(() => EditTrainer(trainer.TrainerID))">
+						<i class="oi oi-pencil"></i>
+					</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</MudSimpleTable>
+*@
+<MudTable Items="trainers" Hover="true" Striped="true" Dense="true" Class="mb-2">
+	<HeaderContent>
+		<MudTh></MudTh>
+		<MudTh>Trainer Id</MudTh>
+		<MudTh>Trainer Name</MudTh>
+		<MudTh>Dog Name</MudTh>
+		<MudTh>Bio</MudTh>
+		<MudTh> </MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Image"><MudAvatar Image="@context.Image"/></MudTd>
+		<MudTd DataLabel="TrainerID">@context.TrainerID</MudTd>
+		<MudTd DataLabel="TrainerName">@context.TrainerName</MudTd>
+		<MudTd DataLabel="DogName">@context.DogName</MudTd>
+		<MudTd DataLabel="Bio">@context.Bio</MudTd>
+		<MudTd DataLabel="Edit">
+			<MudIconButton OnClick="(() => EditTrainer(context.TrainerID))"
+				Icon="@Icons.Material.Filled.Edit"
+				Color="Color.Primary"
+				Variant="Variant.Filled">
+			</MudIconButton>
+		</MudTd>
+	</RowTemplate>
+</MudTable>
+
+<MudButton @onclick="CreateTrainer">Create New Trainer</MudButton>
+@*<button claa="btn btn-primary" @onclick="CreateTrainer">Create a new Trainer</button>*@
+
+<hr />
+
+<EditForm Model="trainer" OnValidSubmit="HandleSubmit">
+	<DataAnnotationsValidator/>
+	<MudCard>
+		<MudCardContent>
+			<MudNumericField Label="Trainer Id" @bind-Value="trainer.TrainerID"
+			For="@(() => trainer.TrainerID)" 
+			HelperText="Minimum value is 1000"></MudNumericField>
+		</MudCardContent>
+		<MudCardContent>
+			<MudTextField Label="Trainer Name" @bind-Value="trainer.TrainerName"
+			For="@(() => trainer.TrainerName)"
+			HelperText="Please enter a trainer name"></MudTextField>
+		</MudCardContent>
+		<MudCardContent>
+			<MudTextField Label="Dog Name" @bind-Value="trainer.DogName"
+			For="@(() => trainer.DogName)"
+			HelperText="Please enter a dog name"></MudTextField>
+		</MudCardContent>
+		<MudCardContent>
+			<MudTextField Label="Bio" @bind-Value="trainer.Bio"
+			Lines="2" For="@(() => trainer.Bio)"
+			HelperText="Please enter a bio"></MudTextField>
+		</MudCardContent>
+		<MudSelect Label="Dog Breed" @bind-Value="trainer.BreedId" HelperText="Please select a dog breed">
+			@foreach (var DogBreed in dogBreeds)
+			{
+				<MudSelectItem Value="DogBreed.Id">@DogBreed.Breed </MudSelectItem>
+			}
+		</MudSelect>
+		<br />
+		<InputFile id="fileInput" OnChange="OnFileChange" hidden />
+		<MudButton HtmlTag="label"
+					Variant="Variant.Filled"
+					Color="Color.Primary"
+					StartIcon="@Icons.Filled.CloudUpload"
+					for="fileInput">
+					Upload Image
+			</MudButton>
+		<MudImage Src="@trainer.Image" Elevation="25" Class="rounded my-2"></MudImage>
+	</MudCard>
+	<MudButton ButtonType="ButtonType.Submit" Class="mr-4 mt-4">
+		@(isNew ? "Create Trainer" : "Update Trainer")
+	</MudButton>
+	@if(!isNew)
+	{
+		<MudButton @onclick="DeleteTrainer" Class="mt-4" Style="color: red">Delete Trainer</MudButton>
+	}
+	
+
+</EditForm>
+
+<p style="height:500px;"></p>m
+

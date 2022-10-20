@@ -1,0 +1,162 @@
+﻿@page "/Events"
+
+<h3>Events</h3>
+
+<table class="table">
+	<thead>
+		<tr>
+			<td></td>
+			<td>Id</td>
+			<td>Event Name</td>
+			<td>Event Start</td>
+			<td>Event End</td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var _event in events)
+		{
+			<tr>
+				<td>@_event.Id</td>
+				<td></td>
+				<td>@_event.EventName</td>
+				<td>@_event.StartDate.ToShortDateString()</td>
+				<td>@_event.EndDate.ToShortDateString()</td>
+				<td>
+					<button class="btn btn-primary" @onclick="(() => EditEvent(_event.Id))"></button>
+					<i class="oi oi-pencil"></i>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+<button class="btn btn-primary" @onclick="CreateEvent">Create Event</button>
+<hr/>
+
+<EditForm Model="events" OnValidSubmit="HandleSubmit">
+	<div>
+		<label for="id">Id</label>
+		<InputNumber id="Id" @bind-Value="_event.Id" class="form-control">Id</InputNumber>
+	</div>
+	<div>
+		<label for="name">name</label>
+		<InputText id="name" @bind-Value="_event.EventName" class="form-control">Event Name</InputText>
+	</div>
+	<div>
+		<label for="startDate">Start Date</label>
+		<InputDate id="startDate" @bind-Value="_event.StartDate" class="form-control"></InputDate>
+	</div>
+	<div>
+		<label for="EndDate">End Date</label>
+		<InputDate id="EndDate" @bind-Value="_event.EndDate" class="form-control"></InputDate>
+	</div>
+	<div>
+		<label for="EventDesc">Description</label>
+		<InputTextArea id="EventDesc" @bind-Value="_event.EventDescription" class="form-control"></InputTextArea>
+	</div>
+	<br/>
+	<button type="submit" class="btn btn-primary">@(isNew ? "Create Event" : "Update Event")</button>
+	@if (!isNew)
+	{
+		<button type="button" class="btn btn-danger" @onclick="DeleteEvent">Delete Event</button>
+	}
+</EditForm>
+
+<p style="height: 500px";></p>
+
+	@code {
+		static List<Event> events = new List<Event>
+	{
+		new Event
+		{
+			Id = 1,
+			EventName = "Eastminster Dog Show - Hound",
+			EventDescription = "The first annual Eastminster Dog Show",
+			StartDate = new DateTime(10/20/2022),
+			EndDate = new DateTime(10/27/2022)
+		},
+
+		new Event
+		{
+			Id = 2,
+			EventName = "Eastminster Dog Show - Toy",
+			EventDescription = "The first annual Eastminster Dog Show",
+			StartDate = new DateTime(10/20/2022),
+			EndDate = new DateTime(10/27/2022)
+		},
+
+		new Event
+		{
+			Id = 3,
+			EventName = "Eastminster Dog Show - Terrier",
+			EventDescription = "The first annual Eastminster Dog Show",
+			StartDate = new DateTime(10/28/2022),
+			EndDate = new DateTime(11/4/2022)
+		},
+
+		new Event
+		{
+			Id = 4,
+			EventName = "Eastminster Dog Show - Herding",
+			EventDescription = "The first annual Eastminster Dog Show",
+			StartDate = new DateTime(11/5/2022),
+			EndDate = new DateTime(11/12/2022)
+		},
+
+		new Event
+		{
+			Id = 5,
+			EventName = "Eastminster Dog Show - Working",
+			EventDescription = "The first annual Eastminster Dog Show",
+			StartDate = new DateTime(11/13/2022),
+			EndDate = new DateTime(11/20/2022)
+		},
+
+		new Event
+		{
+			Id = 6,
+			EventName = "Eastminster Dog Show - Sporting",
+			EventDescription = "The first annual Eastminster Dog Show",
+			StartDate = new DateTime(11/21/22),
+			EndDate = new DateTime(11/28/22)
+		},
+
+		new Event
+		{
+			Id = 7,
+			EventName = "Eastminster Dog Show - Non-Sporting",
+			EventDescription = "The first annual Eastminster Dog Show",
+			StartDate = new DateTime(11/29/2022),
+			EndDate = new DateTime(12/5/2022)
+		}
+	};
+
+		Event _event = new Event();
+		bool isNew = true;
+
+		private void EditEvent(int Id)
+		{
+			var eventToEdit = events.Find(c => c.Id == Id);
+			if (eventToEdit != null)
+			{
+				_event = eventToEdit;
+				isNew = false;
+			}
+		}
+		private void HandleSubmit()
+		{
+			if(isNew)
+			{
+				events.Add(_event);
+			}
+		}
+		private void CreateEvent()
+		{
+			_event = new Event();
+			isNew = true;
+		}
+		private void DeleteEvent()
+		{
+			events.Remove(_event);
+		}
+}
